@@ -16,7 +16,7 @@ int TEMPERATURE_SENC()
 	ADCSRA = 0b10100011;      //Reading A5
 	
 	ADCSRA |= (1 << ADSC);		// start ADC
-	bin = ADCH;							// assign contents of ADC high register to Port D pins
+	bin = ADCH;							// assign contents of ADC high register to bin
 	return bin;
 }
 
