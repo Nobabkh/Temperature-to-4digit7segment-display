@@ -3,6 +3,8 @@
 #define LED_OFF PORTB = 0XFF;
 #define GON PORTC = (0 << PC0);
 #define GOFF PORTC = (1 << PC0);
+#define BIT_IS_SET(byte, bit) (byte & (1 << bit))
+#define BIT_IS_CLEAR(byte, bit) (!(byte & (1 << bit)))
 #define F_CPU 16000000UL
 
 #include <avr/io.h>
@@ -13,9 +15,18 @@ int TEMPERATURE_SENC()
 {
 	float bin;
 	ADMUX = 0b01100101;
-	ADCSRA = 0b10100011;      //Reading A5
+	ADCSRA = 0b10000011;      //Reading A5
 	
-	ADCSRA |= (1 << ADSC);		// start ADC
+	ADCSRA |= (1 << ADSC);// start ADC
+	if(BIT_IS_SET(ADCRA, ADSC))
+	{
+	    _delay_ms(5);
+	    bin = ADCH;
+	}
+	if(BIT_IS_CLEAR(ADCRA, ADSC))
+	{
+	    ADCSRA |= (1 << ADSC);
+	}
 	bin = ADCH;							// assign contents of ADC high register to bin
 	return bin;
 }
